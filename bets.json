@@ -1,0 +1,19 @@
+{
+    "cripto": "BFG",
+    "amount": 4e-05,
+    "range": 0.1,
+    "percent": 24,
+    "loss_raising": 34,
+    "bets": {
+        "1": {
+            "succession": true,
+            "wagered": 0.602,
+            "total_bets": "647/1991"
+        },
+        "2": {
+            "succession": false,
+            "wagered": 0.2836,
+            "total_bets": "207/618"
+        }
+    }
+}
