@@ -76,7 +76,6 @@ class betManager():
                     sg.Text('Total Wagered', text_color='white', font=stats_font, size=(0, 2)), 
                     sg.Push(), # 'push()' pushes the text to the side of the frame
                     sg.Text(str(round(self.total_wagered, 4)), key='totalwagered', font=stats_font, size=(30, 2))],
-
                 [
                     sg.Text('Win Percentage', text_color='white', font=stats_font, size=(0, 2)), 
                     sg.Push(), 
