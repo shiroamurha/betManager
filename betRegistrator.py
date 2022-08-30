@@ -35,7 +35,7 @@ class betManager():
                     (int(total_bets[0]) / (int(total_bets[0]) + int(total_bets[1])))*100 # calculating percentage of winning based on total bets
 
         self.win_percentage = (self.win_counting[0] / (self.win_counting[0] + self.win_counting[1]))*100
-        self.total_profit += (self.win_percentage - 50) * self.database.get('range')
+        self.total_profit += (self.win_counting[0] - self.win_counting[1]) * self.database.get('range')
 
 
 
