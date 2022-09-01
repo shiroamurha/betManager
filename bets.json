@@ -29,6 +29,11 @@
             "succession": true,
             "wagered": 0.8106,
             "total_bets": "291/952"
+        },
+        "6": {
+            "succession": true,
+            "wagered": 0.7476,
+            "total_bets": "600/1903"
         }
     }
 }
