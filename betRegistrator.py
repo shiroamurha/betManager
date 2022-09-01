@@ -30,14 +30,14 @@ class betManager():
 
             total_bets = self.database.get('bets').get(str(bet_num)).get('total_bets').split('/') # spliting '100/400' into ['100', '400'] 
 
-            self.average_bet_ratio = (self.average_bet_ratio + (int(total_bets[0]) / (int(total_bets[0]) + int(total_bets[1])))*100)/2 \
-                if self.average_bet_ratio>0 else \
-                    (int(total_bets[0]) / (int(total_bets[0]) + int(total_bets[1])))*100 
-            # calculating percentage of winning based on total bets
-            # one equation if average_bet_ratio is >0 and another if not
+        self.average_bet_ratio = (self.average_bet_ratio + (int(total_bets[0]) / (int(total_bets[0]) + int(total_bets[1])))*100)/2 \
+            if self.average_bet_ratio>0 else \
+                (int(total_bets[0]) / (int(total_bets[0]) + int(total_bets[1])))*100 
+        # calculating percentage of winning based on total bets
+        # one equation if average_bet_ratio is >0 and another if not
 
         self.win_percentage = (self.win_counting[0] / (self.win_counting[0] + self.win_counting[1]))*100 # wins / all bets * 100
-        self.total_profit += (self.win_counting[0] - self.win_counting[1]) * self.database.get('range') # (win - loss) * bet range
+        self.total_profit = (self.win_counting[0] - self.win_counting[1]) * self.database.get('range') # (win - loss) * bet range
 
 
 
