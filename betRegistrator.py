@@ -15,6 +15,9 @@ class betManager():
         self.total_profit = 0.0
         self.win_counting = [0,0]
 
+        for bet_num in range(1, len(self.database.get('bets'))+1):
+            self.total_wagered += self.database.get('bets').get(str(bet_num)).get('wagered') 
+
         self.update_values()    
         self.UI()
 
@@ -22,19 +25,29 @@ class betManager():
 
     def update_values(self):
 
+        total_bets = list()
+        self.win_counting = [0,0]
+
         for bet_num in range(1, len(self.database.get('bets'))+1):
-            self.total_wagered += self.database.get('bets').get(str(bet_num)).get('wagered') 
-            
+
             self.win_counting[0] += 1 if self.database.get('bets').get(str(bet_num)).get('succession') else 0 # win == index 0
             self.win_counting[1] += 1 if not self.database.get('bets').get(str(bet_num)).get('succession') else 0 # loss == index 1
 
-            total_bets = self.database.get('bets').get(str(bet_num)).get('total_bets').split('/') # spliting '100/400' into ['100', '400'] 
+            total_bets.append(self.database.get('bets').get(str(bet_num)).get('total_bets').split('/')) # spliting '100/400' into ['100', '400'] 
 
-        self.average_bet_ratio = (self.average_bet_ratio + (int(total_bets[0]) / (int(total_bets[0]) + int(total_bets[1])))*100)/2 \
-            if self.average_bet_ratio>0 else \
-                (int(total_bets[0]) / (int(total_bets[0]) + int(total_bets[1])))*100 
-        # calculating percentage of winning based on total bets
-        # one equation if average_bet_ratio is >0 and another if not
+        self.total_wagered += self.database.get('bets').get(list(self.database.get('bets').keys())[-1]).get('wagered') 
+        total_bets.append(0)
+        for item in range(0, len(total_bets)-1):
+
+            total_bets[item] = int(total_bets[item][0]) / (int(total_bets[item][0]) + int(total_bets[item][1])) * 100
+            total_bets[-1] += total_bets[item]
+        self.average_bet_ratio = total_bets[-1] / (len(total_bets)-1)
+
+        # self.average_bet_ratio = (self.average_bet_ratio + (int(item[0]) / (int(item[0]) + int(item[1])))*100)/2 \
+        #     if self.average_bet_ratio>0 else \
+        #         (int(total_bets[0]) / (int(total_bets[0]) + int(total_bets[1])))*100 
+        #     # calculating percentage of winning based on total bets
+        #     # one equation if average_bet_ratio is >0 and another if not
 
         self.win_percentage = (self.win_counting[0] / (self.win_counting[0] + self.win_counting[1]))*100 # wins / all bets * 100
         self.total_profit = (self.win_counting[0] - self.win_counting[1]) * self.database.get('range') # (win - loss) * bet range
@@ -47,8 +60,9 @@ class betManager():
 
         for key in self.bet_example:
 
-            add_bet_log[key] = bool(self.values[key]) if self.values[key] in 'True' else float(self.values[key]) if '.' in self.values[key] else str(self.values[key])
-            # if value is '' or 'True', then bool() it
+            add_bet_log[key] = True if 'True' in self.values[key] else False if 'False' in self.values[key] \
+                else float(self.values[key]) if '.' in self.values[key] else str(self.values[key])
+            # if value is 'True' or 'False', then transform it in bool()
             # elif value has '.', then float() it
             # else str() it
 
@@ -97,9 +111,20 @@ class betManager():
         input_frame = [
             [sg.Text('', size=(15, 1))], # header for alignment
 
-            [sg.Input(key='succession', size=(10, 1)), sg.Text('Succession', size=(11, 1))], 
-            [sg.Input(key='wagered', size=(10, 1)), sg.Text('Wagered', size=(11, 1))], 
-            [sg.Input(key='total_bets', size=(10, 1)), sg.Text('Total Bets', size=(11, 1))],
+            [sg.Combo(
+                    ['    True    ', '   False   '], 
+                    key='succession', 
+                    default_value='    True    ',  
+                    text_color='#705e52', 
+                    background_color='#fdcb52', 
+                    button_background_color='#705e52', button_arrow_color='#fdcb52',
+                    readonly=True, size=(8, 1)
+
+                ), sg.Push(), sg.Text('Succession', size=(11, 1))
+            ], 
+
+            [sg.Input(key='wagered', size=(10, 1)), sg.Push(), sg.Text('Wagered', size=(11, 1))], 
+            [sg.Input(key='total_bets', size=(10, 1)), sg.Push(), sg.Text('Total Bets', size=(11, 1))],
 
             [sg.Text('\n\n\n\n\n')], # pysimplegui simply doesn't want me to align the button, then i did this.
             [sg.Button('SUBMIT', font='verdana 25 bold', button_color='black on ')]
