@@ -117,8 +117,10 @@ class betManager():
                     default_value='    True    ',  
                     text_color='#705e52', 
                     background_color='#fdcb52', 
-                    button_background_color='#705e52', button_arrow_color='#fdcb52',
-                    readonly=True, size=(8, 1)
+                    button_background_color='#705e52', 
+                    button_arrow_color='#fdcb52',
+                    readonly=True, 
+                    size=(8, 1)
 
                 ), sg.Push(), sg.Text('Succession', size=(11, 1))
             ], 
